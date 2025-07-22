@@ -2,6 +2,7 @@ import { rowGap } from "@/styles/utils";
 import { useState } from "react";
 import StartDate from "./StartDate";
 import EndDate from "./EndDate";
+import { ColGapDiv } from "@/styles/divs";
 
 export enum ReadingStatus {
   WANT_TO_READ = "읽고 싶은 책",
@@ -34,7 +35,7 @@ export default function ReadStatus() {
   };
 
   return (
-    <div>
+    <ColGapDiv>
       {readingStatusOptions.map(({ value, label }) => (
         <div key={value} css={rowGap}>
           <input
@@ -51,6 +52,6 @@ export default function ReadStatus() {
 
       {selectedStatus !== ReadingStatus.WANT_TO_READ && <StartDate />}
       {selectedStatus === ReadingStatus.FINISHED && <EndDate />}
-    </div>
+    </ColGapDiv>
   );
 }

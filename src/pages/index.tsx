@@ -12,21 +12,22 @@ import { Main } from "@/styles/textTags";
 import { ColGapDiv } from "@/styles/divs";
 import { useEffect } from "react";
 import useHandleNextStep from "@/components/hooks/useHandleNextStep";
+import { useForm } from "react-hook-form";
 
 export default function Home() {
   const { currentStep, handleNextClick } = useHandleNextStep();
+  const { handleSubmit } = useForm();
 
   useEffect(() => {
     fetch("/api/books")
       .then((res) => {
-        console.log("✅ 응답 상태:", res.status);
         return res.json();
       })
       .then((data) => {
-        console.log("📚 책 데이터:", data);
+        console.log("책 데이터:", data);
       })
       .catch((err) => {
-        console.error("❌ 요청 실패:", err);
+        console.error("책 데이터 요청 실패:", err);
       });
   }, []);
 
@@ -58,9 +59,9 @@ export default function Home() {
 
       <Main>
         <ColGapDiv>
-          {renderStepComponent()}
+            {renderStepComponent()}
           {currentStep < 5 && (
-            <ButtonStrong onClick={handleNextClick}>다음</ButtonStrong>
+            <ButtonStrong type="submit" onClick={handleNextClick}>다음</ButtonStrong>
           )}
         </ColGapDiv>
         <AppFormView />

@@ -67,7 +67,7 @@ const globalStyles = (theme: AppTheme) => css`
     font: inherit;
     color: inherit;
     background: none;
-    border: 2px solid ${theme.colors.primaryDark};
+    border: 2px solid ${theme.colors.disabledText};
     border-radius: 5px;
     padding: 10px;
     margin: 0;
