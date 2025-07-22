@@ -7,6 +7,11 @@ export const ColGapDiv = styled.div`
 export const RowGapDiv = styled.div`
     ${rowGap}
 `
+export const RowGapCenterDiv = styled.div`
+    ${rowGap}
+    align-items: center;
+`
+
 export const CenterDiv = styled.div`
     ${centered}
 `

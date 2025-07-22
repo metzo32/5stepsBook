@@ -12,6 +12,7 @@ import type { Book } from "@/types/books";
 import type { Dayjs } from "dayjs";
 
 import ReadStatus from "./readStatus";
+import dayjs from "dayjs";
 
 export default function Step01() {
   // const { currentStep, handleNextClick } = useHandleNextStep();
@@ -51,8 +52,9 @@ export default function Step01() {
           <RowGapDiv key={idx}>
             <ColGapDiv>
               <h1>1단계</h1>
-              <h2>제목: {book.title}</h2>
-              <h3>저자: {book.author}</h3>
+              <h2>{book.title}</h2>
+              <h3>{book.author}</h3>
+              <h4>출판일: {book.published}</h4>
             </ColGapDiv>
 
             <ImageDiv>
@@ -117,6 +119,7 @@ export default function Step01() {
         </form>
 
         <ReadStatus
+          publishedDate={dayjs(books[0]?.published)}
           startDate={startDate}
           setStartDate={setStartDate}
           endDate={endDate}

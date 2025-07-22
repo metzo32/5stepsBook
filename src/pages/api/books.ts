@@ -7,7 +7,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         id: "1",
         title: "The Great Gatsby",
         author: "F. Scott Fitzgerald",
-       image: "/images/the_great_gatsby.jpg",
+        published: "2024-10-10",
+        image: "/images/the_great_gatsby.jpg",
       },
     ]);
   } else {

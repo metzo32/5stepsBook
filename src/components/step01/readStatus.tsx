@@ -5,8 +5,10 @@ import EndDate from "./EndDate";
 import { ColGapDiv, RowGapDiv } from "@/styles/divs";
 import { LabelClick } from "@/styles/textTags";
 import type { Dayjs } from "dayjs";
+import { useForm } from "react-hook-form";
 
 interface ReadStatusProps {
+  publishedDate: Dayjs;
   startDate: Dayjs | null;
   setStartDate: (startDate: Dayjs | null) => void;
   endDate: Dayjs | null;
@@ -35,6 +37,7 @@ export const readingStatusOptions = Object.values(ReadingStatus).map(
 );
 
 export default function ReadStatus({
+  publishedDate,
   startDate,
   setStartDate,
   endDate,
@@ -43,6 +46,12 @@ export default function ReadStatus({
   const [selectedStatus, setSelectedStatus] = useState<ReadingStatus | null>(
     null
   );
+
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors }, // 폼 상태에 따른 다양한 속성
+  } = useForm();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedStatus(e.target.value as ReadingStatus);
@@ -66,10 +75,14 @@ export default function ReadStatus({
 
       <RowGapDiv>
         {selectedStatus && selectedStatus !== ReadingStatus.WANT_TO_READ && (
-          <StartDate startDate={startDate} setStartDate={setStartDate} />
+          <StartDate publishedDate={publishedDate} startDate={startDate} setStartDate={setStartDate} />
         )}
         {selectedStatus === ReadingStatus.FINISHED && (
-          <EndDate endDate={endDate} setEndDate={setEndDate} />
+          <EndDate
+            startDate={startDate}
+            endDate={endDate}
+            setEndDate={setEndDate}
+          />
         )}
       </RowGapDiv>
     </ColGapDiv>
