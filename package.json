@@ -1,0 +1,36 @@
+{
+   "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  
+  "name": "multi-step-form_page_router",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/metzo32/searchBooks5steps.git",
+  "author": "METZ <metzo3232@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@emotion/cache": "^11.14.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/server": "^11.11.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/material": "^7.2.0",
+    "@mui/x-date-pickers": "^8.9.0",
+    "@tanstack/react-query": "^5.83.0",
+    "dayjs": "^1.11.13",
+    "msw": "^2.10.4",
+    "next": "15.3.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.60.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.15",
+    "@types/react": "^19.1.8",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "eslint": "^9.31.0",
+    "typescript": "^5.8.3"
+  }
+}
