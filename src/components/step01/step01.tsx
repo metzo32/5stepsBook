@@ -1,17 +1,30 @@
-import { ColGapDiv, RowGapDiv, ImageDiv } from "@/styles/divs";
-import type { Book } from "@/types/books";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import ReadStatus from "./readStatus";
-import { ButtonStrong } from "@/styles/buttons";
-import useHandleNextStep from "../hooks/useHandleNextStep";
 import { useForm } from "react-hook-form";
+import useHandleNextStep from "../hooks/useHandleNextStep";
+import { dayjsToString } from "../modules/dayjsToString";
+
+import { ColGapDiv, RowGapDiv, ImageDiv } from "@/styles/divs";
 import { Small } from "@/styles/textTags";
+import { ButtonStrong } from "@/styles/buttons";
+
+import type { Book } from "@/types/books";
+import type { Dayjs } from "dayjs";
+
+import ReadStatus from "./readStatus";
 
 export default function Step01() {
   // const { currentStep, handleNextClick } = useHandleNextStep();
 
   const [books, setBooks] = useState<Book[]>([]);
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
+
+  useEffect(() => {
+    if (startDate) {
+      console.log("시작일", dayjsToString(startDate));
+    }
+  }, [startDate]);
 
   const {
     register,
@@ -103,8 +116,12 @@ export default function Step01() {
           </ColGapDiv>
         </form>
 
-        <ReadStatus />
-        
+        <ReadStatus
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+        />
       </ColGapDiv>
     </ColGapDiv>
   );

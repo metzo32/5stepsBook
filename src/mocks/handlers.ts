@@ -8,13 +8,9 @@ export const handlers = [
         id: '1',
         title: 'The Great Gatsby',
         author: 'F. Scott Fitzgerald',
+        published: '2024-10-10',
         image: "/images/the_great_gatsby.jpg",
       },
-    //   {
-    //     id: '2',
-    //     title: '1984',
-    //     author: 'George Orwell',
-    //   },
     ]);
   }),
 ];

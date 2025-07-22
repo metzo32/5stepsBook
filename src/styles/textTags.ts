@@ -20,3 +20,7 @@ export const Textarea = styled.textarea`
   height: 200px;
   resize: none;
 `
+
+export const LabelClick = styled.label`
+  cursor: pointer;
+`

@@ -2,7 +2,16 @@ import { rowGap } from "@/styles/utils";
 import { useState } from "react";
 import StartDate from "./StartDate";
 import EndDate from "./EndDate";
-import { ColGapDiv } from "@/styles/divs";
+import { ColGapDiv, RowGapDiv } from "@/styles/divs";
+import { LabelClick } from "@/styles/textTags";
+import type { Dayjs } from "dayjs";
+
+interface ReadStatusProps {
+  startDate: Dayjs | null;
+  setStartDate: (startDate: Dayjs | null) => void;
+  endDate: Dayjs | null;
+  setEndDate: (endDate: Dayjs | null) => void;
+}
 
 export enum ReadingStatus {
   WANT_TO_READ = "읽고 싶은 책",
@@ -25,7 +34,12 @@ export const readingStatusOptions = Object.values(ReadingStatus).map(
   })
 );
 
-export default function ReadStatus() {
+export default function ReadStatus({
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
+}: ReadStatusProps) {
   const [selectedStatus, setSelectedStatus] = useState<ReadingStatus | null>(
     null
   );
@@ -46,12 +60,18 @@ export default function ReadStatus() {
             onChange={handleChange}
             checked={selectedStatus === value}
           />
-          <label htmlFor={value}>{label}</label>
+          <LabelClick htmlFor={value}>{label}</LabelClick>
         </div>
       ))}
 
-      {selectedStatus !== ReadingStatus.WANT_TO_READ && <StartDate />}
-      {selectedStatus === ReadingStatus.FINISHED && <EndDate />}
+      <RowGapDiv>
+        {selectedStatus && selectedStatus !== ReadingStatus.WANT_TO_READ && (
+          <StartDate startDate={startDate} setStartDate={setStartDate} />
+        )}
+        {selectedStatus === ReadingStatus.FINISHED && (
+          <EndDate endDate={endDate} setEndDate={setEndDate} />
+        )}
+      </RowGapDiv>
     </ColGapDiv>
   );
 }
