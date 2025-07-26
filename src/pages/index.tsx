@@ -1,22 +1,21 @@
 "use client";
 
-import { ButtonStrong } from "@/styles/buttons";
-import Head from "next/head";
-import Step01 from "@/components/step01/step01";
-import Step02 from "@/components/step02/step02";
-import Step03 from "@/components/step03/step03";
-import Step04 from "@/components/step04/step04";
-import Step05 from "@/components/step05/step05";
-import AppFormView from "@/components/appFormView/AppFormView";
-import { Main } from "@/styles/textTags";
-import { ColGapDiv } from "@/styles/divs";
 import { useEffect } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import Head from "next/head";
 import useHandleNextStep from "@/components/hooks/useHandleNextStep";
-import { useForm } from "react-hook-form";
+import AppFormView from "@/components/appFormView/AppFormView";
+import RenderSteps from "@/components/RenderSteps";
+
+import { Main } from "@/styles/textTags";
+import { ButtonStrong } from "@/styles/buttons";
+import { defaultFormValues } from "@/types/defaultFormValues";
 
 export default function Home() {
   const { currentStep, handleNextClick } = useHandleNextStep();
-  const { handleSubmit } = useForm();
+  const methods = useForm({ defaultValues: defaultFormValues });
+
+  // defaulValues를 설정하면 새로고침 한 경우 초기화 되는 문제가 있다? 아닌 것 같다?
 
   useEffect(() => {
     fetch("/api/books")
@@ -24,28 +23,19 @@ export default function Home() {
         return res.json();
       })
       .then((data) => {
-        console.log("책 데이터:", data);
+        return true;
       })
       .catch((err) => {
         console.error("책 데이터 요청 실패:", err);
       });
   }, []);
 
-  const renderStepComponent = () => {
-    switch (currentStep) {
-      case 1:
-        return <Step01 />;
-      case 2:
-        return <Step02 />;
-      case 3:
-        return <Step03 />;
-      case 4:
-        return <Step04 />;
-      case 5:
-        return <Step05 />;
-      default:
-        return <Step01 />;
-    }
+  const onValid = (data: any) => {
+    handleNextClick();
+  };
+
+  const onInvalid = (errors: any) => {
+    console.log("유효성 검증 실패", errors);
   };
 
   return (
@@ -58,13 +48,13 @@ export default function Home() {
       </Head>
 
       <Main>
-        <ColGapDiv>
-            {renderStepComponent()}
-          {currentStep < 5 && (
-            <ButtonStrong type="submit" onClick={handleNextClick}>다음</ButtonStrong>
-          )}
-        </ColGapDiv>
-        <AppFormView />
+        <FormProvider {...methods}>
+          <form noValidate onSubmit={methods.handleSubmit(onValid, onInvalid)}>
+            {RenderSteps()}
+            {currentStep < 5 && <ButtonStrong type="submit">다음</ButtonStrong>}
+          </form>
+          <AppFormView />
+        </FormProvider>
       </Main>
     </>
   );

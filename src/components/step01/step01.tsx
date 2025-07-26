@@ -1,49 +1,22 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useForm } from "react-hook-form";
-import useHandleNextStep from "../hooks/useHandleNextStep";
-import { dayjsToString } from "../modules/dayjsToString";
+import { useFormContext } from "react-hook-form";
 
 import { ColGapDiv, RowGapDiv, ImageDiv } from "@/styles/divs";
 import { Small } from "@/styles/textTags";
-import { ButtonStrong } from "@/styles/buttons";
 
 import type { Book } from "@/types/books";
-import type { Dayjs } from "dayjs";
 
 import ReadStatus from "./readStatus";
 import dayjs from "dayjs";
 
 export default function Step01() {
-  // const { currentStep, handleNextClick } = useHandleNextStep();
-
+  
   const [books, setBooks] = useState<Book[]>([]);
-  const [startDate, setStartDate] = useState<Dayjs | null>(null);
-  const [endDate, setEndDate] = useState<Dayjs | null>(null);
-
-  useEffect(() => {
-    if (startDate) {
-      console.log("시작일", dayjsToString(startDate));
-    }
-  }, [startDate]);
 
   const {
-    register,
-    handleSubmit,
-    formState: { isSubmitting, isSubmitted, errors },
-  } = useForm();
-
-  useEffect(() => {
-    fetch("/api/books")
-      .then((res) => {
-        if (!res.ok) throw new Error("API 요청 실패");
-        return res.json();
-      })
-      .then((data) => setBooks(data))
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
+    formState: { errors },
+  } = useFormContext();
 
   return (
     <ColGapDiv>
@@ -55,6 +28,7 @@ export default function Step01() {
               <h2>{book.title}</h2>
               <h3>{book.author}</h3>
               <h4>출판일: {book.published}</h4>
+              <h4>페이지 수: {book.pageNum}</h4>
             </ColGapDiv>
 
             <ImageDiv>
@@ -65,66 +39,13 @@ export default function Step01() {
       })}
 
       <ColGapDiv>
-        <form
-          noValidate
-          onSubmit={handleSubmit(async (data) => {
-            await new Promise((r) => setTimeout(r, 1_000));
-            alert(JSON.stringify(data));
-          })}
-        >
-          <ColGapDiv>
-            <label htmlFor="email">이메일</label>
-            <input
-              id="email"
-              type="email"
-              placeholder="example@email.com"
-              {...register("email", {
-                required: "이메일은 필수 사항입니다.",
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "이메일 형식에 맞지 않습니다.",
-                },
-              })}
-              aria-invalid={
-                isSubmitted ? (errors.email ? "true" : "false") : undefined
-              }
-            />
-            {errors.email && <Small>{errors.email.message as String}</Small>}
+        <ColGapDiv>
+          <ReadStatus publishedDate={dayjs(books[0]?.published)} />
 
-            <label htmlFor="password">비밀번호</label>
-            <input
-              id="password"
-              type="password"
-              placeholder="********"
-              {...register("password", {
-                required: "비밀번호는 필수 사항입니다.",
-                minLength: {
-                  value: 8,
-                  message: "비밀번호는 최소 8자리여야 합니다.",
-                },
-              })}
-              aria-invalid={
-                isSubmitted ? (errors.password ? "true" : "false") : undefined
-              }
-            />
-
-            {errors.password && (
-              <Small>{errors.password.message as String}</Small>
-            )}
-
-            <ButtonStrong type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "로딩 중..." : "로그인"}
-            </ButtonStrong>
-          </ColGapDiv>
-        </form>
-
-        <ReadStatus
-          publishedDate={dayjs(books[0]?.published)}
-          startDate={startDate}
-          setStartDate={setStartDate}
-          endDate={endDate}
-          setEndDate={setEndDate}
-        />
+          {errors.readStatus && (
+            <Small>{errors.readStatus.message as String}</Small>
+          )}
+        </ColGapDiv>
       </ColGapDiv>
     </ColGapDiv>
   );

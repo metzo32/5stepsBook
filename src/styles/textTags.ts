@@ -5,10 +5,13 @@ export const Small = styled.small`
 `;
 
 export const Main = styled.main`
+height: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: 1fr;
   gap: 20px;
+  box-sizing: border-box;
+
 
   @media (max-width: 1023px) {
     grid-template-columns: repeat(1, 1fr);
@@ -21,6 +24,6 @@ export const Textarea = styled.textarea`
   resize: none;
 `
 
-export const LabelClick = styled.label`
+export const LabelClickable = styled.label`
   cursor: pointer;
 `

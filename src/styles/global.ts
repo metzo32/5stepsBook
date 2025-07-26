@@ -37,6 +37,7 @@ const globalStyles = (theme: AppTheme) => css`
 
   body {
     padding: 20px;
+    height: 100vh;
   }
 
   a {
@@ -80,6 +81,12 @@ const globalStyles = (theme: AppTheme) => css`
 
   input[aria-invalid="false"] {
     border-color: ${theme.colors.primary};
+  }
+
+  textarea {
+    resize: none;
+    width: 100%;
+    aspect-ratio: 3/1;
   }
 
   button {

@@ -1,4 +1,4 @@
-import { Controller, useForm } from "react-hook-form";
+import { Control, Controller, useForm } from "react-hook-form";
 import { DatePicker } from "@mui/x-date-pickers";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
@@ -8,35 +8,32 @@ import { Small } from "@/styles/textTags";
 
 interface EndDateProps {
   startDate: Dayjs | null;
-  endDate: Dayjs | null;
-  setEndDate: (endDate: Dayjs | null) => void;
+  control: Control;
 }
 
-export default function EndDate({
-  startDate,
-  endDate,
-  setEndDate,
-}: EndDateProps) {
-  const isStartDateValid = startDate && dayjs(startDate).isValid();
-  const { control } = useForm();
+export default function EndDate({ startDate, control }: EndDateProps) {
 
   return (
     <ColGapDiv>
       <RowGapCenterDiv>
         <h5>종료일</h5>
-        {!isStartDateValid && <Small>시작일을 먼저 입력해주세요.</Small>}
       </RowGapCenterDiv>
       <Controller
         control={control}
-        name="EndDatepicker"
-        render={() => (
-          <DatePicker
-            disabled={!startDate}
-            minDate={dayjs(startDate)}
-            maxDate={dayjs(new Date())}
-            value={endDate}
-            onChange={(newValue) => setEndDate(newValue)}
-          />
+        name="endDate"
+        rules={{ required: "종료일을 입력해주세요" }}
+        render={({ field, fieldState }) => (
+          <>
+            <DatePicker
+              {...field}
+              disabled={!startDate}
+              minDate={dayjs(startDate)}
+              maxDate={dayjs(new Date())}
+              value={field.value || null}
+              onChange={(newValue) => field.onChange(newValue)}
+            />
+            {fieldState.error && <Small>{fieldState.error.message}</Small>}
+          </>
         )}
       />
     </ColGapDiv>

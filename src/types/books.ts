@@ -4,4 +4,5 @@ export type Book = {
   author: string;
   published: string;
   image: string;
+  pageNum: number;
 };

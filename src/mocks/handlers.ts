@@ -10,6 +10,7 @@ export const handlers = [
         author: 'F. Scott Fitzgerald',
         published: '2024-10-10',
         image: "/images/the_great_gatsby.jpg",
+        pageNum: 200,
       },
     ]);
   }),

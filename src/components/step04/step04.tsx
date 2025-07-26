@@ -1,9 +1,10 @@
-import React from 'react'
+import FieldArray from "./FieldArray";
 
 export default function Step04() {
   return (
     <div>
-      4단계
+      <h1>4단계 인용구</h1>
+      <FieldArray/>
     </div>
-  )
+  );
 }

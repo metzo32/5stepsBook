@@ -1,35 +1,37 @@
-import { ColGapDiv } from "@/styles/divs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Dayjs } from "dayjs";
 import dayjs from "dayjs";
-import { Controller, useForm } from "react-hook-form";
+import type { Dayjs } from "dayjs";
+import { Control, Controller } from "react-hook-form";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+
+import { ColGapDiv } from "@/styles/divs";
+import { Small } from "@/styles/textTags";
 
 interface StartDateProps {
+  control: Control<any>;
   publishedDate: Dayjs;
-  startDate: Dayjs | null;
-  setStartDate: (startDate: Dayjs | null) => void;
 }
 
-export default function StartDate({
-  publishedDate,
-  startDate,
-  setStartDate,
-}: StartDateProps) {
-  const { control } = useForm();
-
+export default function StartDate({ control, publishedDate }: StartDateProps) {
   return (
     <ColGapDiv>
       <h5>시작일</h5>
       <Controller
+        name="startDate"
         control={control}
-        name="StartDatepicker"
-        render={() => (
-          <DatePicker
-            minDate={publishedDate}
-            maxDate={dayjs(new Date())}
-            value={startDate}
-            onChange={(newValue) => setStartDate(newValue)}
-          />
+        rules={{ required: "시작일을 입력해주세요" }}
+        render={({ field, fieldState }) => (
+          <>
+            <DatePicker
+              {...field}
+              minDate={publishedDate}
+              maxDate={dayjs(new Date())}
+              value={field.value || null}
+              onChange={(newValue) => field.onChange(newValue)}
+            />
+            {fieldState.error && (
+              <Small>{fieldState.error.message}</Small> 
+            )}
+          </>
         )}
       />
     </ColGapDiv>

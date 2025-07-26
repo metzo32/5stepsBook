@@ -1,18 +1,16 @@
 import { rowGap } from "@/styles/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StartDate from "./StartDate";
 import EndDate from "./EndDate";
 import { ColGapDiv, RowGapDiv } from "@/styles/divs";
-import { LabelClick } from "@/styles/textTags";
+import { LabelClickable, Small } from "@/styles/textTags";
 import type { Dayjs } from "dayjs";
-import { useForm } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
+import { dayjsToString } from "../modules/dayjsToString";
+import { useRouter } from "next/router";
 
 interface ReadStatusProps {
   publishedDate: Dayjs;
-  startDate: Dayjs | null;
-  setStartDate: (startDate: Dayjs | null) => void;
-  endDate: Dayjs | null;
-  setEndDate: (endDate: Dayjs | null) => void;
 }
 
 export enum ReadingStatus {
@@ -36,25 +34,83 @@ export const readingStatusOptions = Object.values(ReadingStatus).map(
   })
 );
 
-export default function ReadStatus({
-  publishedDate,
-  startDate,
-  setStartDate,
-  endDate,
-  setEndDate,
-}: ReadStatusProps) {
-  const [selectedStatus, setSelectedStatus] = useState<ReadingStatus | null>(
-    null
-  );
-
+export default function ReadStatus({ publishedDate }: ReadStatusProps) {
   const {
     register,
-    handleSubmit,
-    formState: { isSubmitting, errors }, // 폼 상태에 따른 다양한 속성
-  } = useForm();
+    control,
+    setValue,
+    clearErrors,
+    formState: { isSubmitted, errors },
+  } = useFormContext();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedStatus(e.target.value as ReadingStatus);
+  const router = useRouter();
+  const { query } = router;
+
+  const [status, setStatus] = useState("");
+
+  const readStatus = useWatch({ name: "readStatus" }); // 특정 필드값 구독
+  const startDate = useWatch({ name: "startDate" }); // 특정 필드값 구독
+  const endDate = useWatch({ name: "endDate" }); // 특정 필드값 구독
+
+  const stringStartDate = dayjsToString(startDate);
+  const stringEndDate = dayjsToString(endDate);
+
+  // useEffect(() => {
+  //   const newQuery = {
+  //     ...query,
+  //     readStatus: readStatus || undefined,
+  //     startDate: stringStartDate || undefined,
+  //     endDate: stringEndDate || undefined,
+  //   };
+
+  //   router.replace(
+  //     {
+  //       pathname: router.pathname,
+  //       query: newQuery,
+  //     },
+  //     undefined,
+  //     { shallow: true }
+  //   );
+  // }, [readStatus, stringStartDate, stringEndDate]);
+
+
+  // 구
+  // useEffect(() => {
+  //   if (query.readStatus) {
+  //     const readStatusString = query.readStatus.toString();
+
+  //     setStatus(readStatusString);
+  //   }
+  // }, [query]);
+
+  // 신
+  useEffect(() => {
+    if (query.readStatus) {
+      setValue("readStatus", query.readStatus); // RHF 필드에 초기값 세팅
+    }
+  }, [query.readStatus, setValue]);
+
+  // readStatus가 바뀌면 날짜 관련 선택값 및 에러 초기화
+  useEffect(() => {
+    setValue("startDate", null);
+    setValue("endDate", null);
+    clearErrors("startDate");
+    clearErrors("endDate");
+  }, [readStatus, setValue]);
+
+  const handleSelectStatus = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    console.log("선택값", value);
+
+    router.replace(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, readStatus: value },
+      },
+      undefined,
+      { shallow: true }
+    );
   };
 
   return (
@@ -63,25 +119,32 @@ export default function ReadStatus({
         <div key={value} css={rowGap}>
           <input
             id={value}
-            name="readingStatus"
             value={value}
             type="radio"
-            onChange={handleChange}
-            checked={selectedStatus === value}
+            {...register("readStatus", {
+              required: "독서 상태를 선택해주세요",
+              onChange: handleSelectStatus,
+            })}
+            aria-invalid={
+              isSubmitted ? (errors.readStatus ? "true" : "false") : undefined
+            }
           />
-          <LabelClick htmlFor={value}>{label}</LabelClick>
+          <LabelClickable htmlFor={value}>{label}</LabelClickable>
         </div>
       ))}
 
       <RowGapDiv>
-        {selectedStatus && selectedStatus !== ReadingStatus.WANT_TO_READ && (
-          <StartDate publishedDate={publishedDate} startDate={startDate} setStartDate={setStartDate} />
+        {readStatus && readStatus !== ReadingStatus.WANT_TO_READ && (
+          <StartDate
+            control={control} // RHF의 상태 전달
+            publishedDate={publishedDate}
+          />
         )}
-        {selectedStatus === ReadingStatus.FINISHED && (
+
+        {readStatus === ReadingStatus.FINISHED && (
           <EndDate
             startDate={startDate}
-            endDate={endDate}
-            setEndDate={setEndDate}
+            control={control} // RHF의 상태 전달
           />
         )}
       </RowGapDiv>
