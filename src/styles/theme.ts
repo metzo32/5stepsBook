@@ -1,7 +1,6 @@
 // emotion 전용테마
 
 import type {} from "@mui/x-date-pickers/themeAugmentation";
-
 const theme = {
   colors: {
     primary: "#2563EB",       // 파란색 중심 (버튼, 강조 텍스트 등)

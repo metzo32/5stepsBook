@@ -40,8 +40,6 @@ export default function AppFormView() {
         return prev;
       }
 
-      console.log("리스트", delayedStatusList)
-
       return [...prev, newStatus];
     });
   }, 500);

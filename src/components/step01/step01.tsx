@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
-import Image from "next/image";
 import { useFormContext } from "react-hook-form";
 
-import { ColGapDiv, RowGapDiv, ImageDiv } from "@/styles/divs";
+import { ColGapDiv, RowGapDiv, ImageDiv, FitImage } from "@/styles/divs";
 import { Small } from "@/styles/textTags";
 
 import type { Book } from "@/types/books";
@@ -10,9 +8,7 @@ import type { Book } from "@/types/books";
 import ReadStatus from "./readStatus";
 import dayjs from "dayjs";
 
-export default function Step01() {
-  
-  const [books, setBooks] = useState<Book[]>([]);
+export default function Step01({books}: {books: Book[]}) {
 
   const {
     formState: { errors },
@@ -32,7 +28,7 @@ export default function Step01() {
             </ColGapDiv>
 
             <ImageDiv>
-              <Image src={book.image} alt={book.title} fill />
+              <FitImage src={book.image} alt={book.title} fill/>
             </ImageDiv>
           </RowGapDiv>
         );

@@ -41,6 +41,19 @@ const muiTheme = createTheme({
         },
       },
     },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          "& .MuiOutlinedInput-root": {
+            "&.Mui-error": {
+              "& fieldset": {
+                borderColor: "#EF4444",
+              },
+            },
+          },
+        },
+      },
+    },
   },
 });
 

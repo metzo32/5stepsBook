@@ -1,34 +1,52 @@
 "use client";
 
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import Head from "next/head";
 import useHandleNextStep from "@/components/hooks/useHandleNextStep";
 import AppFormView from "@/components/appFormView/AppFormView";
-import RenderSteps from "@/components/RenderSteps";
+// import RenderSteps from "@/components/RenderSteps";
 
 import { Main } from "@/styles/textTags";
 import { ButtonStrong } from "@/styles/buttons";
 import { defaultFormValues } from "@/types/defaultFormValues";
+import { Book } from "@/types/books";
+import { ColGapDiv } from "@/styles/divs";
+
+
+const RenderSteps = lazy(() => import("@/components/RenderSteps"));
 
 export default function Home() {
   const { currentStep, handleNextClick } = useHandleNextStep();
   const methods = useForm({ defaultValues: defaultFormValues });
 
-  // defaulValues를 설정하면 새로고침 한 경우 초기화 되는 문제가 있다? 아닌 것 같다?
+  const [books, setBooks] = useState<Book[]>([]);
+  // const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/books")
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        return true;
-      })
-      .catch((err) => {
-        console.error("책 데이터 요청 실패:", err);
-      });
+    const fetchBooks = async () => {
+      try {
+        const res = await fetch("/api/books");
+        const data = await res.json();
+        setBooks(data);
+      } catch (err) {
+        console.error("책 데이터를 가져오는 데 실패했습니다", err);
+        return <p>책 데이터가 없습니다.</p>;
+      } finally {
+        // setIsLoading(false);
+      }
+    };
+
+    setTimeout(() => {
+      fetchBooks();
+    }, 1000);
+
+    console.log("index에서 부른 데이터", books);
   }, []);
+
+  // if (isLoading) {
+  //   return <p>불러오는 중...</p>;
+  // }
 
   const onValid = (data: any) => {
     handleNextClick();
@@ -48,13 +66,19 @@ export default function Home() {
       </Head>
 
       <Main>
+        <Suspense fallback={<p>데이터 불러오는 중...</p>}>
         <FormProvider {...methods}>
           <form noValidate onSubmit={methods.handleSubmit(onValid, onInvalid)}>
-            {RenderSteps()}
-            {currentStep < 5 && <ButtonStrong type="submit">다음</ButtonStrong>}
+            <ColGapDiv>
+              <RenderSteps books={books}/>
+              {currentStep < 5 && (
+                <ButtonStrong type="submit">다음</ButtonStrong>
+              )}
+            </ColGapDiv>
           </form>
           <AppFormView />
         </FormProvider>
+        </Suspense>
       </Main>
     </>
   );

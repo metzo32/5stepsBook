@@ -60,6 +60,8 @@ const globalStyles = (theme: AppTheme) => css`
     padding: 0;
     margin: 0;
     outline: none;
+    cursor: pointer;
+    white-space: nowrap;
   }
 
   input,
@@ -75,11 +77,13 @@ const globalStyles = (theme: AppTheme) => css`
     outline: none;
   }
 
-  input[aria-invalid="true"] {
+  input[aria-invalid="true"],
+  textarea[aria-invalid="true"] {
     border-color: ${theme.colors.error};
   }
 
-  input[aria-invalid="false"] {
+  input[aria-invalid="false"],
+  textarea[aria-invalid="false"] {
     border-color: ${theme.colors.primary};
   }
 
@@ -87,10 +91,6 @@ const globalStyles = (theme: AppTheme) => css`
     resize: none;
     width: 100%;
     aspect-ratio: 3/1;
-  }
-
-  button {
-    cursor: pointer;
   }
 
   img,

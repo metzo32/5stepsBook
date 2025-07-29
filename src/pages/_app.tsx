@@ -14,7 +14,9 @@ const clientSideEmotionCache = createEmotionCache();
 
 if (process.env.NEXT_PUBLIC_API_MOCKING === "enabled") {
   import("../mocks/browser").then(({ worker }) => {
-    worker.start({ onUnhandledRequest: "warn" });
+    worker.start({ onUnhandledRequest: "warn" }).then(() => {
+      console.log("MSW 시작")
+    })
   });
 }
 

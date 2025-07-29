@@ -1,6 +1,6 @@
 
 export const defaultFormValues = {
-    readStatus: "테스트",
+    readStatus: null,
     startDate: "",
     endDate: "",
     review: ""

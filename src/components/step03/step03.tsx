@@ -11,7 +11,7 @@ export default function Step03() {
 
   const {
     register,
-    formState: { errors },
+    formState: { errors, isSubmitted },
   } = useFormContext();
 
   const userReview = useWatch({ name: "review" });
@@ -31,7 +31,6 @@ export default function Step03() {
   return (
     <div>
       <h1>3단계 독후감</h1>
-      {isRequired && <Small>필수 사항입니다.</Small>}
 
       <textarea
         id="review"
@@ -41,8 +40,17 @@ export default function Step03() {
             ? "100자 이상 작성해주세요"
             : "독후감을 자유롭게 작성해주세요"
         }
+        aria-invalid={
+          isSubmitted ? (errors.review ? "true" : "false") : undefined
+        }
         {...register("review", {
-          required: "내용을 작성해주세요",
+          required: isRequired ? "내용을 작성해주세요" : false,
+          minLength: isRequired
+            ? {
+                value: 100,
+                message: "100자 이상 작성해주세요",
+              }
+            : 0,
         })}
       />
       <p className="text-gray-500 text-xs md:text-sm text-right mt-1">

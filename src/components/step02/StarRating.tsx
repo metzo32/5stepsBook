@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BsStarFill, BsStarHalf, BsStar } from "react-icons/bs";
 import { LeftStarBox, RightStarBox, StarDiv, StarWrapper } from "./styles";
+import { useRouter } from "next/router";
 
 interface StarRatingProps {
   value: number | null;
@@ -8,6 +9,8 @@ interface StarRatingProps {
 }
 
 export default function StarRating({ value, onChangeValue }: StarRatingProps) {
+  const router = useRouter();
+
   const [hoveredValue, setHoveredValue] = useState<number | null>(null);
 
   const renderStar = (index: number) => {
@@ -19,7 +22,18 @@ export default function StarRating({ value, onChangeValue }: StarRatingProps) {
     return <BsStar size={30} />;
   };
 
-  const handleClick = (index: number) => onChangeValue(index);
+  const handleClick = (index: number) => {
+    onChangeValue(index);
+
+    router.replace(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, rating: index.toString() },
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
 
   const handleMouseEnter = (index: number) => setHoveredValue(index);
 
@@ -42,7 +56,6 @@ export default function StarRating({ value, onChangeValue }: StarRatingProps) {
           />
 
           {renderStar(i)}
-          
         </StarDiv>
       ))}
     </StarWrapper>

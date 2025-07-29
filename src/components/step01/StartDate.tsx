@@ -27,6 +27,11 @@ export default function StartDate({ control, publishedDate }: StartDateProps) {
               maxDate={dayjs(new Date())}
               value={field.value || null}
               onChange={(newValue) => field.onChange(newValue)}
+              slotProps={{
+                textField: {
+                  error: !!fieldState.error,
+                },
+              }}
             />
             {fieldState.error && (
               <Small>{fieldState.error.message}</Small> 

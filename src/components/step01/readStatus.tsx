@@ -13,7 +13,7 @@ interface ReadStatusProps {
   publishedDate: Dayjs;
 }
 
-export enum ReadingStatus {
+export enum ReadingStatusEnum {
   WANT_TO_READ = "읽고 싶은 책",
   READING = "읽는 중",
   FINISHED = "읽음",
@@ -21,13 +21,13 @@ export enum ReadingStatus {
 }
 
 export const ReadingStatusLabels = {
-  [ReadingStatus.WANT_TO_READ]: "읽고 싶은 책",
-  [ReadingStatus.READING]: "읽는 중",
-  [ReadingStatus.FINISHED]: "읽음",
-  [ReadingStatus.PENDING]: "보류 중",
+  [ReadingStatusEnum.WANT_TO_READ]: "읽고 싶은 책",
+  [ReadingStatusEnum.READING]: "읽는 중",
+  [ReadingStatusEnum.FINISHED]: "읽음",
+  [ReadingStatusEnum.PENDING]: "보류 중",
 };
 
-export const readingStatusOptions = Object.values(ReadingStatus).map(
+export const readingStatusOptions = Object.values(ReadingStatusEnum).map(
   (status) => ({
     label: status,
     value: status,
@@ -55,25 +55,6 @@ export default function ReadStatus({ publishedDate }: ReadStatusProps) {
   const stringStartDate = dayjsToString(startDate);
   const stringEndDate = dayjsToString(endDate);
 
-  // useEffect(() => {
-  //   const newQuery = {
-  //     ...query,
-  //     readStatus: readStatus || undefined,
-  //     startDate: stringStartDate || undefined,
-  //     endDate: stringEndDate || undefined,
-  //   };
-
-  //   router.replace(
-  //     {
-  //       pathname: router.pathname,
-  //       query: newQuery,
-  //     },
-  //     undefined,
-  //     { shallow: true }
-  //   );
-  // }, [readStatus, stringStartDate, stringEndDate]);
-
-
   // 구
   // useEffect(() => {
   //   if (query.readStatus) {
@@ -100,8 +81,6 @@ export default function ReadStatus({ publishedDate }: ReadStatusProps) {
 
   const handleSelectStatus = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-
-    console.log("선택값", value);
 
     router.replace(
       {
@@ -134,14 +113,14 @@ export default function ReadStatus({ publishedDate }: ReadStatusProps) {
       ))}
 
       <RowGapDiv>
-        {readStatus && readStatus !== ReadingStatus.WANT_TO_READ && (
+        {readStatus && readStatus !== ReadingStatusEnum.WANT_TO_READ && (
           <StartDate
             control={control} // RHF의 상태 전달
             publishedDate={publishedDate}
           />
         )}
 
-        {readStatus === ReadingStatus.FINISHED && (
+        {readStatus === ReadingStatusEnum.FINISHED && (
           <EndDate
             startDate={startDate}
             control={control} // RHF의 상태 전달

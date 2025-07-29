@@ -6,6 +6,13 @@ export const colGap = css`
   gap: 1rem;
 `;
 
+export const colGapLg = css`
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+`;
+
+
 export const rowGap = css`
   display: flex;
   flex-direction: row;
