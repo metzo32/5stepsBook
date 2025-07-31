@@ -2,6 +2,7 @@ import { ColGapDiv, RowGapDiv } from "@/styles/divs";
 import { LabelClickable } from "@/styles/textTags";
 import React from "react";
 import { useFormContext } from "react-hook-form";
+import CommaController from "../CommaSeparatedInput/CommaController";
 
 export default function Step05() {
   enum PublicStatusEnum {
@@ -29,6 +30,7 @@ export default function Step05() {
   return (
     <ColGapDiv>
       <h1>공개 여부</h1>
+      <CommaController name="test"/>
       <ColGapDiv>
         {PublicStatusOptions.map(({ value, label }) => (
           <RowGapDiv key={value}>

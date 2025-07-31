@@ -26,7 +26,7 @@ const theme = {
     info: "#0EA5E9",          // 정보 메시지
 
     disabledBg: "#E2E8F0",     
-    disabledText: "#94A3B8",   
+    disabledText: "#adafb2",   
   },
 };
 

@@ -1,8 +1,13 @@
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
-import { QuoteTextarea } from "./styled";
+import { QuoteTextarea } from "@/styles/textTags";
 import { ButtonMedium, ButtonStrong } from "@/styles/buttons";
 import { Small } from "@/styles/textTags";
-import { ColGapDiv, ColGapDivLg, RowGapDiv } from "@/styles/divs";
+import {
+  ColGapDiv,
+  ColGapDivFull,
+  ColGapDivLg,
+  RowGapDivFull,
+} from "@/styles/divs";
 import { useEffect } from "react";
 
 export default function FieldArray({ totalPage }: { totalPage: number }) {
@@ -45,24 +50,32 @@ export default function FieldArray({ totalPage }: { totalPage: number }) {
       <ColGapDivLg>
         {fields.map((field, index) => {
           return (
-            <ColGapDiv key={index}>
+            <ColGapDivFull
+              key={index}
+              css={{ paddingBottom: "20px", borderBottom: "1px solid black" }}
+            >
               <label htmlFor={`quotes.${index}.quote`}>{`인용구 ${
                 index + 1
               }`}</label>
-              <RowGapDiv>
-                <ColGapDiv>
+              <RowGapDivFull>
+                <ColGapDivFull>
                   <QuoteTextarea
                     placeholder="저장하고 싶은 인용구"
                     aria-invalid={
-                      isSubmitted ? ((errors?.quotes as any)?.[index]?.quote ? "true" : "false") : undefined
+                      isSubmitted
+                        ? (errors?.quotes as any)?.[index]?.quote
+                          ? "true"
+                          : "false"
+                        : undefined
                     }
                     {...register(`quotes.${index}.quote`, {
                       required: "인용구는 필수입니다.",
                     })}
                   />
-                  {errors?.quotes?.[index]?.quote?.message && (
-                    <Small>{(errors.quotes as any)[index].quote.message}</Small>
-                  )}
+                  {Array.isArray(errors.quotes) &&
+                    errors.quotes[index]?.quote?.message && (
+                      <Small>{errors.quotes[index]?.quote?.message}</Small>
+                    )}
 
                   {isPageRequired && (
                     <>
@@ -70,7 +83,11 @@ export default function FieldArray({ totalPage }: { totalPage: number }) {
                         type="number"
                         placeholder="인용구의 페이지를 작성해주세요."
                         aria-invalid={
-                          isSubmitted ? ((errors?.quotes as any)?.[index]?.page ? "true" : "false") : undefined
+                          isSubmitted
+                            ? (errors?.quotes as any)?.[index]?.page
+                              ? "true"
+                              : "false"
+                            : undefined
                         }
                         {...register(`quotes.${index}.page`, {
                           required: "인용구의 페이지를 작성해주세요.",
@@ -85,12 +102,13 @@ export default function FieldArray({ totalPage }: { totalPage: number }) {
                         })}
                       />
 
-                      {errors?.quotes?.[index]?.page.message && (
-                        <Small>{(errors.quotes as any)[index].page.message}</Small>
-                      )}
+                      {Array.isArray(errors.quotes) &&
+                        errors.quotes[index]?.page?.message && (
+                          <Small>{errors.quotes[index]?.page?.message}</Small>
+                        )}
                     </>
                   )}
-                </ColGapDiv>
+                </ColGapDivFull>
 
                 <ButtonMedium
                   type="button"
@@ -100,8 +118,8 @@ export default function FieldArray({ totalPage }: { totalPage: number }) {
                 >
                   삭제
                 </ButtonMedium>
-              </RowGapDiv>
-            </ColGapDiv>
+              </RowGapDivFull>
+            </ColGapDivFull>
           );
         })}
       </ColGapDivLg>

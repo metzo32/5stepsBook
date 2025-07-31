@@ -1,9 +1,13 @@
 import styled from "@emotion/styled";
-import { colGap, rowGap, centered, colGapLg } from "./utils";
+import { colGap, rowGap, centered, colGapLg, rowBetween } from "./utils";
 import Image from "next/image";
 
 export const ColGapDiv = styled.div`
-//   width: 100%;
+  ${colGap}
+`;
+
+export const ColGapDivFull = styled.div`
+  width: 100%;
   ${colGap}
 `;
 
@@ -15,6 +19,17 @@ export const ColGapDivLg = styled.div`
 export const RowGapDiv = styled.div`
   ${rowGap}
 `;
+
+export const RowGapDivFull = styled.div`
+  width: 100%;
+  ${rowGap}
+`;
+
+export const RowBetween = styled.div`
+  width: 100%;
+  ${rowBetween}
+`;
+
 export const RowGapCenterDiv = styled.div`
   ${rowGap}
   align-items: center;
@@ -32,5 +47,5 @@ export const ImageDiv = styled.div`
 `;
 
 export const FitImage = styled(Image)`
-    object-fit: cover;
-`
+  object-fit: cover;
+`;

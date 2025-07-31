@@ -1,9 +1,9 @@
 import { rowGap } from "@/styles/utils";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import StartDate from "./StartDate";
 import EndDate from "./EndDate";
 import { ColGapDiv, RowGapDiv } from "@/styles/divs";
-import { LabelClickable, Small } from "@/styles/textTags";
+import { LabelClickable } from "@/styles/textTags";
 import type { Dayjs } from "dayjs";
 import { useFormContext, useWatch } from "react-hook-form";
 import { dayjsToString } from "../modules/dayjsToString";
@@ -46,8 +46,6 @@ export default function ReadStatus({ publishedDate }: ReadStatusProps) {
   const router = useRouter();
   const { query } = router;
 
-  const [status, setStatus] = useState("");
-
   const readStatus = useWatch({ name: "readStatus" }); // 특정 필드값 구독
   const startDate = useWatch({ name: "startDate" }); // 특정 필드값 구독
   const endDate = useWatch({ name: "endDate" }); // 특정 필드값 구독
@@ -55,16 +53,6 @@ export default function ReadStatus({ publishedDate }: ReadStatusProps) {
   const stringStartDate = dayjsToString(startDate);
   const stringEndDate = dayjsToString(endDate);
 
-  // 구
-  // useEffect(() => {
-  //   if (query.readStatus) {
-  //     const readStatusString = query.readStatus.toString();
-
-  //     setStatus(readStatusString);
-  //   }
-  // }, [query]);
-
-  // 신
   useEffect(() => {
     if (query.readStatus) {
       setValue("readStatus", query.readStatus); // RHF 필드에 초기값 세팅

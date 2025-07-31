@@ -1,6 +1,11 @@
 import { useFormContext } from "react-hook-form";
 
-import { ColGapDiv, RowGapDiv, ImageDiv, FitImage } from "@/styles/divs";
+import {
+  ColGapDiv,
+  ImageDiv,
+  FitImage,
+  RowBetween,
+} from "@/styles/divs";
 import { Small } from "@/styles/textTags";
 
 import type { Book } from "@/types/books";
@@ -8,8 +13,7 @@ import type { Book } from "@/types/books";
 import ReadStatus from "./readStatus";
 import dayjs from "dayjs";
 
-export default function Step01({books}: {books: Book[]}) {
-
+export default function Step01({ books }: { books: Book[] }) {
   const {
     formState: { errors },
   } = useFormContext();
@@ -18,7 +22,7 @@ export default function Step01({books}: {books: Book[]}) {
     <ColGapDiv>
       {books.map((book, idx) => {
         return (
-          <RowGapDiv key={idx}>
+          <RowBetween key={idx}>
             <ColGapDiv>
               <h1>1단계</h1>
               <h2>{book.title}</h2>
@@ -28,9 +32,9 @@ export default function Step01({books}: {books: Book[]}) {
             </ColGapDiv>
 
             <ImageDiv>
-              <FitImage src={book.image} alt={book.title} fill/>
+              <FitImage src={book.image} alt={book.title} fill />
             </ImageDiv>
-          </RowGapDiv>
+          </RowBetween>
         );
       })}
 

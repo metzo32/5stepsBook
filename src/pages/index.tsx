@@ -13,7 +13,6 @@ import { defaultFormValues } from "@/types/defaultFormValues";
 import { Book } from "@/types/books";
 import { ColGapDiv } from "@/styles/divs";
 
-
 const RenderSteps = lazy(() => import("@/components/RenderSteps"));
 
 export default function Home() {
@@ -21,7 +20,6 @@ export default function Home() {
   const methods = useForm({ defaultValues: defaultFormValues });
 
   const [books, setBooks] = useState<Book[]>([]);
-  // const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -33,7 +31,6 @@ export default function Home() {
         console.error("책 데이터를 가져오는 데 실패했습니다", err);
         return <p>책 데이터가 없습니다.</p>;
       } finally {
-        // setIsLoading(false);
       }
     };
 
@@ -43,10 +40,6 @@ export default function Home() {
 
     console.log("index에서 부른 데이터", books);
   }, []);
-
-  // if (isLoading) {
-  //   return <p>불러오는 중...</p>;
-  // }
 
   const onValid = (data: any) => {
     handleNextClick();
@@ -66,18 +59,21 @@ export default function Home() {
       </Head>
 
       <Main>
-        <Suspense fallback={<p>데이터 불러오는 중...</p>}>
-        <FormProvider {...methods}>
-          <form noValidate onSubmit={methods.handleSubmit(onValid, onInvalid)}>
-            <ColGapDiv>
-              <RenderSteps books={books}/>
-              {currentStep < 5 && (
-                <ButtonStrong type="submit">다음</ButtonStrong>
-              )}
-            </ColGapDiv>
-          </form>
-          <AppFormView />
-        </FormProvider>
+        <Suspense fallback={<div>로딩 스피너 추가하기</div>}>
+          <FormProvider {...methods}>
+            <form
+              noValidate
+              onSubmit={methods.handleSubmit(onValid, onInvalid)}
+            >
+              <ColGapDiv>
+                <RenderSteps books={books} />
+                {currentStep < 5 && (
+                  <ButtonStrong type="submit">다음</ButtonStrong>
+                )}
+              </ColGapDiv>
+            </form>
+            <AppFormView />
+          </FormProvider>
         </Suspense>
       </Main>
     </>

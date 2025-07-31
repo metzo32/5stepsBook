@@ -33,3 +33,10 @@ export const Input = styled.input<{ hasError?: boolean }>`
 export const LabelClickable = styled.label`
   cursor: pointer;
 `;
+
+export const QuoteTextarea = styled.textarea<{ hasError?: boolean }>`
+    width: 100%;
+    aspect-ratio: 4/1;
+    border: 2px solid
+      ${({ hasError, theme }) => (hasError ? theme.colors.error : theme.colors.secondary)};
+`

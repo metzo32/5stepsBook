@@ -1,7 +1,11 @@
 
 export const defaultFormValues = {
     readStatus: null,
-    startDate: "",
-    endDate: "",
-    review: ""
+    startDate: null,
+    endDate: null,
+    rating: null,
+    review: "",
+    quotes: [
+      { quote: "", page: undefined }, 
+    ],
 }
