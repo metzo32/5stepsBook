@@ -1,13 +1,13 @@
-import { rowGap } from "@/styles/utils";
 import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { useFormContext, useWatch } from "react-hook-form";
+import type { Dayjs } from "dayjs";
+import { dayjsToString } from "../modules/dayjsToString";
 import StartDate from "./StartDate";
 import EndDate from "./EndDate";
 import { ColGapDiv, RowGapDiv } from "@/styles/divs";
 import { LabelClickable } from "@/styles/textTags";
-import type { Dayjs } from "dayjs";
-import { useFormContext, useWatch } from "react-hook-form";
-import { dayjsToString } from "../modules/dayjsToString";
-import { useRouter } from "next/router";
+import dayjs from "dayjs";
 
 interface ReadStatusProps {
   publishedDate: Dayjs;
@@ -50,40 +50,53 @@ export default function ReadStatus({ publishedDate }: ReadStatusProps) {
   const startDate = useWatch({ name: "startDate" }); // 특정 필드값 구독
   const endDate = useWatch({ name: "endDate" }); // 특정 필드값 구독
 
-  const stringStartDate = dayjsToString(startDate);
-  const stringEndDate = dayjsToString(endDate);
+  // const stringStartDate = dayjsToString(startDate);
+  // const stringEndDate = dayjsToString(endDate);
 
   useEffect(() => {
     if (query.readStatus) {
       setValue("readStatus", query.readStatus); // RHF 필드에 초기값 세팅
     }
-  }, [query.readStatus, setValue]);
 
-  // readStatus가 바뀌면 날짜 관련 선택값 및 에러 초기화
-  useEffect(() => {
-    setValue("startDate", null);
-    setValue("endDate", null);
-    clearErrors("startDate");
-    clearErrors("endDate");
-  }, [readStatus, setValue]);
+    if (query.startDate) {
+      const startDateValue =
+        typeof query.startDate === "string" ? query.startDate : undefined;
+      setValue("startDate", startDateValue ? dayjs(startDateValue) : null);
+    }
+
+    if (query.endDate) {
+      const endDateValue =
+        typeof query.endDate === "string" ? query.endDate : undefined;
+      setValue("endDate", endDateValue ? dayjs(endDateValue) : null);
+    }
+  }, [query, setValue]);
+
 
   const handleSelectStatus = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
+    // RHF 값 초기화
+    setValue("startDate", null);
+    setValue("endDate", null);
+    clearErrors("startDate");
+    clearErrors("endDate");
+
+    // 쿼리스트링에서 startDate, endDate 제거 + readStatus만 남기기
+    const { startDate, endDate, ...restQuery } = router.query;
+
     router.replace(
       {
         pathname: router.pathname,
-        query: { ...router.query, readStatus: value },
+        query: { ...restQuery, readStatus: value },
       },
       undefined,
       { shallow: true }
     );
   };
-
   return (
     <ColGapDiv>
       {readingStatusOptions.map(({ value, label }) => (
-        <div key={value} css={rowGap}>
+        <RowGapDiv key={value}>
           <input
             id={value}
             value={value}
@@ -97,7 +110,7 @@ export default function ReadStatus({ publishedDate }: ReadStatusProps) {
             }
           />
           <LabelClickable htmlFor={value}>{label}</LabelClickable>
-        </div>
+        </RowGapDiv>
       ))}
 
       <RowGapDiv>

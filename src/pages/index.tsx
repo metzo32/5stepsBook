@@ -17,7 +17,7 @@ const RenderSteps = lazy(() => import("@/components/RenderSteps"));
 
 export default function Home() {
   const { currentStep, handleNextClick } = useHandleNextStep();
-  const methods = useForm({ defaultValues: defaultFormValues });
+  const methods = useForm({ defaultValues: {...defaultFormValues,} });
 
   const [books, setBooks] = useState<Book[]>([]);
 
