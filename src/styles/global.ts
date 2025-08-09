@@ -89,6 +89,7 @@ const globalStyles = (theme: AppTheme) => css`
 
   textarea {
     resize: none;
+    min-width: 200px;
     width: 100%;
     aspect-ratio: 3/1;
   }

@@ -19,15 +19,7 @@ interface handleDateChangeProps {
 }
 
 export default function EndDate({ startDate, control }: EndDateProps) {
-  const { setValue } = useFormContext();
   const router = useRouter();
-  const { query } = router;
-
-  useEffect(() => {
-    if (query.endDate && typeof query.endDate === "string") {
-      setValue("endDate", dayjs(query.endDate));
-    }
-  }, [query, setValue]);
 
   const handleDateChange = ({ newValue, field }: handleDateChangeProps) => {
     field.onChange(newValue);
@@ -37,9 +29,6 @@ export default function EndDate({ startDate, control }: EndDateProps) {
         pathname: router.pathname,
         query: {
           ...router.query,
-          endDate: newValue
-            ? dayjs(newValue).format("YYYY-MM-DD").toString()
-            : undefined,
         },
       },
       undefined,

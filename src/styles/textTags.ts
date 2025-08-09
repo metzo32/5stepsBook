@@ -22,12 +22,14 @@ export const Textarea = styled.textarea<{ hasError: boolean }>`
   height: 200px;
   resize: none;
   border: 1px solid
-    ${({ hasError, theme }) => (hasError ? theme.colors.error : theme.colors.secondary)};
+    ${({ hasError, theme }) =>
+      hasError ? theme.colors.error : theme.colors.secondary};
 `;
 
 export const Input = styled.input<{ hasError?: boolean }>`
   border: 1px solid
-    ${({ hasError, theme }) => (hasError ? theme.colors.error : theme.colors.secondary)};
+    ${({ hasError, theme }) =>
+      hasError ? theme.colors.error : theme.colors.secondary};
 `;
 
 export const LabelClickable = styled.label`
@@ -35,8 +37,9 @@ export const LabelClickable = styled.label`
 `;
 
 export const QuoteTextarea = styled.textarea<{ hasError?: boolean }>`
-    width: 100%;
-    aspect-ratio: 4/1;
-    border: 2px solid
-      ${({ hasError, theme }) => (hasError ? theme.colors.error : theme.colors.secondary)};
-`
+  width: 100%;
+  aspect-ratio: 4/1;
+  border: 2px solid
+    ${({ hasError, theme }) =>
+      hasError ? theme.colors.error : theme.colors.secondary};
+`;

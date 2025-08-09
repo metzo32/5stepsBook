@@ -5,6 +5,7 @@ import {
   ImageDiv,
   FitImage,
   RowBetween,
+  RowBetweenMain,
 } from "@/styles/divs";
 import { Small } from "@/styles/textTags";
 
@@ -22,7 +23,7 @@ export default function Step01({ books }: { books: Book[] }) {
     <ColGapDiv>
       {books.map((book, idx) => {
         return (
-          <RowBetween key={idx}>
+          <RowBetweenMain key={idx}>
             <ColGapDiv>
               <h1>1단계</h1>
               <h2>{book.title}</h2>
@@ -34,7 +35,7 @@ export default function Step01({ books }: { books: Book[] }) {
             <ImageDiv>
               <FitImage src={book.image} alt={book.title} fill />
             </ImageDiv>
-          </RowBetween>
+          </RowBetweenMain>
         );
       })}
 

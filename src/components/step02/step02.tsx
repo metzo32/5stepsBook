@@ -29,7 +29,6 @@ export default function Step02() {
     router.replace(
       {
         pathname: router.pathname,
-        query: { ...router.query, rating: value },
       },
       undefined,
       { shallow: true }
@@ -49,7 +48,7 @@ export default function Step02() {
         )}
       />
 
-       {errors.rating && (
+      {errors.rating && (
         <p style={{ color: "red" }}>{errors.rating.message as string}</p>
       )}
     </ColGapDiv>

@@ -6,6 +6,7 @@ import { useFormContext, useWatch } from "react-hook-form";
 export default function Step03() {
   const [isRequired, setIsRequired] = useState(false);
 
+  const { setValue } = useFormContext();
   const router = useRouter();
   const { query } = router;
 
@@ -20,6 +21,7 @@ export default function Step03() {
 
   const MIN_LENGTH = 100;
 
+  // Rating 점수에 따른 필수 입력 여부
   useEffect(() => {
     if (!router.isReady) return;
 
@@ -27,6 +29,10 @@ export default function Step03() {
       setIsRequired(true);
     }
   }, [router.isReady, rating]);
+
+  // useEffect(() => {
+  //   setValue("review",)
+  // },[])
 
   return (
     <div>

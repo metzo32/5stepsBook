@@ -30,6 +30,13 @@ export const RowBetween = styled.div`
   ${rowBetween}
 `;
 
+export const RowBetweenMain = styled.div`
+  width: 100%;
+  min-width: 508px;
+  ${rowBetween}
+`;
+
+
 export const RowGapCenterDiv = styled.div`
   ${rowGap}
   align-items: center;

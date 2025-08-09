@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { QuoteTextarea } from "@/styles/textTags";
 import { ButtonMedium, ButtonStrong } from "@/styles/buttons";
@@ -8,19 +9,18 @@ import {
   ColGapDivLg,
   RowGapDivFull,
 } from "@/styles/divs";
-import { useEffect } from "react";
+import { FormValues } from "@/types/defaultFormValues";
 
 export default function FieldArray({ totalPage }: { totalPage: number }) {
   const {
     register,
     control,
-    watch,
     formState: { errors, isSubmitted },
-  } = useFormContext();
+  } = useFormContext<FormValues>();
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "quotes", // 초기 입력값
+    name: "quotes",
   });
 
   const quotes = useWatch({ control, name: "quotes" });
@@ -32,6 +32,10 @@ export default function FieldArray({ totalPage }: { totalPage: number }) {
   }, [quotes]);
 
   const isPageRequired = quotes?.length >= 2;
+
+  const onlyNum = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.target.value = e.target.value.replace(/[^0-9]/g, "");
+  };
 
   return (
     <ColGapDiv>
@@ -50,10 +54,7 @@ export default function FieldArray({ totalPage }: { totalPage: number }) {
       <ColGapDivLg>
         {fields.map((field, index) => {
           return (
-            <ColGapDivFull
-              key={index}
-              css={{ paddingBottom: "20px", borderBottom: "1px solid black" }}
-            >
+            <ColGapDivFull key={index}>
               <label htmlFor={`quotes.${index}.quote`}>{`인용구 ${
                 index + 1
               }`}</label>
@@ -80,8 +81,9 @@ export default function FieldArray({ totalPage }: { totalPage: number }) {
                   {isPageRequired && (
                     <>
                       <input
-                        type="number"
+                        type="text"
                         placeholder="인용구의 페이지를 작성해주세요."
+                        onInput={onlyNum}
                         aria-invalid={
                           isSubmitted
                             ? (errors?.quotes as any)?.[index]?.page
@@ -91,6 +93,10 @@ export default function FieldArray({ totalPage }: { totalPage: number }) {
                         }
                         {...register(`quotes.${index}.page`, {
                           required: "인용구의 페이지를 작성해주세요.",
+                          pattern: {
+                            value: /^\d+$/,
+                            message: "숫자만 입력 가능합니다.",
+                          },
                           min: {
                             value: 1,
                             message: "페이지 번호가 유효하지 않습니다.",

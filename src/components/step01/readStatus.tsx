@@ -50,9 +50,6 @@ export default function ReadStatus({ publishedDate }: ReadStatusProps) {
   const startDate = useWatch({ name: "startDate" }); // 특정 필드값 구독
   const endDate = useWatch({ name: "endDate" }); // 특정 필드값 구독
 
-  // const stringStartDate = dayjsToString(startDate);
-  // const stringEndDate = dayjsToString(endDate);
-
   useEffect(() => {
     if (query.readStatus) {
       setValue("readStatus", query.readStatus); // RHF 필드에 초기값 세팅
@@ -71,10 +68,7 @@ export default function ReadStatus({ publishedDate }: ReadStatusProps) {
     }
   }, [query, setValue]);
 
-
   const handleSelectStatus = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-
     // RHF 값 초기화
     setValue("startDate", null);
     setValue("endDate", null);
@@ -82,12 +76,12 @@ export default function ReadStatus({ publishedDate }: ReadStatusProps) {
     clearErrors("endDate");
 
     // 쿼리스트링에서 startDate, endDate 제거 + readStatus만 남기기
-    const { startDate, endDate, ...restQuery } = router.query;
+    const { readStatus, startDate, endDate, ...cleanedQuery } = router.query;
 
     router.replace(
       {
         pathname: router.pathname,
-        query: { ...restQuery, readStatus: value },
+        query: { ...cleanedQuery },
       },
       undefined,
       { shallow: true }
