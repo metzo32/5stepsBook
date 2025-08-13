@@ -1,38 +1,26 @@
 import { Small } from "@/styles/textTags";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 
 export default function Step03() {
   const [isRequired, setIsRequired] = useState(false);
 
-  const { setValue } = useFormContext();
-  const router = useRouter();
-  const { query } = router;
-
   const {
     register,
     formState: { errors, isSubmitted },
   } = useFormContext();
 
+  const userRating = useWatch({ name: "rating" });
   const userReview = useWatch({ name: "review" });
-
-  const rating = Number(query.rating);
 
   const MIN_LENGTH = 100;
 
   // Rating 점수에 따른 필수 입력 여부
   useEffect(() => {
-    if (!router.isReady) return;
-
-    if (rating === 5 || rating <= 1) {
+    if (userRating === 5 || userRating <= 1) {
       setIsRequired(true);
     }
-  }, [router.isReady, rating]);
-
-  // useEffect(() => {
-  //   setValue("review",)
-  // },[])
+  }, [userRating]);
 
   return (
     <div>

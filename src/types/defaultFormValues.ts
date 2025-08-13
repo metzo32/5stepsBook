@@ -5,6 +5,7 @@ export interface Quote {
   page: number | undefined;
 }
 
+// 타입
 export interface FormValues {
   readStatus: string | null;
   startDate: Dayjs | null;
@@ -15,6 +16,7 @@ export interface FormValues {
   publicStatus: null | string;
 }
 
+// 초기값
 export const defaultFormValues: FormValues = {
   readStatus: null,
   startDate: null,

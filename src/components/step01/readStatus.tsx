@@ -1,13 +1,10 @@
-import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useFormContext, useWatch } from "react-hook-form";
 import type { Dayjs } from "dayjs";
-import { dayjsToString } from "../modules/dayjsToString";
 import StartDate from "./StartDate";
 import EndDate from "./EndDate";
 import { ColGapDiv, RowGapDiv } from "@/styles/divs";
 import { LabelClickable } from "@/styles/textTags";
-import dayjs from "dayjs";
 
 interface ReadStatusProps {
   publishedDate: Dayjs;
@@ -44,44 +41,20 @@ export default function ReadStatus({ publishedDate }: ReadStatusProps) {
   } = useFormContext();
 
   const router = useRouter();
-  const { query } = router;
 
   const readStatus = useWatch({ name: "readStatus" }); // 특정 필드값 구독
   const startDate = useWatch({ name: "startDate" }); // 특정 필드값 구독
   const endDate = useWatch({ name: "endDate" }); // 특정 필드값 구독
 
-  useEffect(() => {
-    if (query.readStatus) {
-      setValue("readStatus", query.readStatus); // RHF 필드에 초기값 세팅
-    }
-
-    if (query.startDate) {
-      const startDateValue =
-        typeof query.startDate === "string" ? query.startDate : undefined;
-      setValue("startDate", startDateValue ? dayjs(startDateValue) : null);
-    }
-
-    if (query.endDate) {
-      const endDateValue =
-        typeof query.endDate === "string" ? query.endDate : undefined;
-      setValue("endDate", endDateValue ? dayjs(endDateValue) : null);
-    }
-  }, [query, setValue]);
-
   const handleSelectStatus = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // RHF 값 초기화
     setValue("startDate", null);
     setValue("endDate", null);
     clearErrors("startDate");
     clearErrors("endDate");
 
-    // 쿼리스트링에서 startDate, endDate 제거 + readStatus만 남기기
-    const { readStatus, startDate, endDate, ...cleanedQuery } = router.query;
-
     router.replace(
       {
         pathname: router.pathname,
-        query: { ...cleanedQuery },
       },
       undefined,
       { shallow: true }

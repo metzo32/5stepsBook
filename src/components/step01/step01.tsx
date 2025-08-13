@@ -1,18 +1,10 @@
 import { useFormContext } from "react-hook-form";
-
-import {
-  ColGapDiv,
-  ImageDiv,
-  FitImage,
-  RowBetween,
-  RowBetweenMain,
-} from "@/styles/divs";
-import { Small } from "@/styles/textTags";
-
-import type { Book } from "@/types/books";
-
 import ReadStatus from "./readStatus";
+import type { Book } from "@/types/books";
 import dayjs from "dayjs";
+// import JotaiTest from "@/states/JotaiTest";
+import { ColGapDiv, ImageDiv, FitImage, RowBetweenMain } from "@/styles/divs";
+import { Small } from "@/styles/textTags";
 
 export default function Step01({ books }: { books: Book[] }) {
   const {
@@ -21,6 +13,7 @@ export default function Step01({ books }: { books: Book[] }) {
 
   return (
     <ColGapDiv>
+      {/* <JotaiTest /> */}
       {books.map((book, idx) => {
         return (
           <RowBetweenMain key={idx}>

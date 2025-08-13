@@ -6,7 +6,6 @@ import { Controller, useFormContext } from "react-hook-form";
 
 export default function Step02() {
   const router = useRouter();
-  const { query } = router;
 
   const {
     control,
@@ -15,25 +14,25 @@ export default function Step02() {
 
   const [rating, setRating] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (query.rating) {
-      const parsed = parseFloat(query.rating as string);
-      if (!isNaN(parsed)) {
-        setRating(parsed);
-      }
-    }
-  }, [query.rating]);
+  // useEffect(() => {
+  //   if (query.rating) {
+  //     const parsed = parseFloat(query.rating as string);
+  //     if (!isNaN(parsed)) {
+  //       setRating(parsed);
+  //     }
+  //   }
+  // }, [query.rating]);
 
-  const handleRatingChange = (value: number) => {
-    setRating(value);
-    router.replace(
-      {
-        pathname: router.pathname,
-      },
-      undefined,
-      { shallow: true }
-    );
-  };
+  // const handleRatingChange = (value: number) => {
+  //   setRating(value);
+  //   router.replace(
+  //     {
+  //       pathname: router.pathname,
+  //     },
+  //     undefined,
+  //     { shallow: true }
+  //   );
+  // };
 
   return (
     <ColGapDiv>
