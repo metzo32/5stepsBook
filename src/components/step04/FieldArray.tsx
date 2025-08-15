@@ -116,14 +116,16 @@ export default function FieldArray({ totalPage }: { totalPage: number }) {
                   )}
                 </ColGapDivFull>
 
-                <ButtonMedium
-                  type="button"
-                  onClick={() => {
-                    remove(index);
-                  }}
-                >
-                  삭제
-                </ButtonMedium>
+                {fields.length > 1 && (
+                  <ButtonMedium
+                    type="button"
+                    onClick={() => {
+                      remove(index);
+                    }}
+                  >
+                    삭제
+                  </ButtonMedium>
+                )}
               </RowGapDivFull>
             </ColGapDivFull>
           );
