@@ -1,6 +1,8 @@
-import { useState } from "react";
-import { BsStarFill, BsStarHalf, BsStar } from "react-icons/bs";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { LeftStarBox, RightStarBox, StarDiv, StarWrapper } from "./styles";
+import { BsStarFill, BsStarHalf, BsStar } from "react-icons/bs";
+import { useFormContext } from "react-hook-form";
 
 interface StarRatingProps {
   value: number | null;
@@ -8,6 +10,10 @@ interface StarRatingProps {
 }
 
 export default function StarRating({ value, onChangeValue }: StarRatingProps) {
+  const { setValue } = useFormContext();
+  const router = useRouter();
+  const { query } = router;
+
   const [hoveredValue, setHoveredValue] = useState<number | null>(null);
 
   const renderStar = (index: number) => {
@@ -19,7 +25,24 @@ export default function StarRating({ value, onChangeValue }: StarRatingProps) {
     return <BsStar size={30} />;
   };
 
-  const handleClick = (index: number) => onChangeValue(index);
+  useEffect(() => {
+    if (query.rating) {
+      setValue("rating", query.rating)
+    }
+  }, [query, setValue]);
+
+  const handleClick = (index: number) => {
+    onChangeValue(index);
+
+    router.replace(
+      {
+        pathname: router.pathname,
+        query: { ...router.query },
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
 
   const handleMouseEnter = (index: number) => setHoveredValue(index);
 
@@ -42,7 +65,6 @@ export default function StarRating({ value, onChangeValue }: StarRatingProps) {
           />
 
           {renderStar(i)}
-          
         </StarDiv>
       ))}
     </StarWrapper>

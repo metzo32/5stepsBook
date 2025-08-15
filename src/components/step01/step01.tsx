@@ -1,42 +1,79 @@
-import { ColGapDiv, RowGapDiv, ImageDiv } from "@/styles/divs";
-import type { Book } from "@/types/books";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
+import { Suspense, useEffect } from "react";
+import { useFormContext } from "react-hook-form";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { ErrorBoundary } from "react-error-boundary";
+import BookAutoComplete from "@/components/BookAutoComplete";
+import { fetchBooks } from "@/utils/api";
+import dayjs from "dayjs";
+import ReadStatus from "./readStatus";
+import { ColGapDiv, ImageDiv, FitImage, RowBetweenMain } from "@/styles/divs";
+import { Small } from "@/styles/textTags";
 
-export default function Step01() {
-  const [books, setBooks] = useState<Book[]>([]);
-  const [error, setError] = useState<string | null>(null);
+function LoadingBar() {
+  return <div>책 목록 불러오는 중...</div>;
+}
 
-  useEffect(() => {
-    fetch("/api/books")
-      .then((res) => {
-        if (!res.ok) throw new Error("API 요청 실패");
-        return res.json();
-      })
-      .then((data) => setBooks(data))
-      .catch((err) => {
-        console.error(err);
-        setError("책 데이터를 불러오는 데 실패했습니다.");
-      });
-  }, []);
-
+function RejectedFallback({ error }: { error: Error }) {
   return (
     <div>
-      {books.map((book, idx) => {
-        return (
-          <RowGapDiv key={idx}>
+      <p>에러 발생: {error.message}</p>
+    </div>
+  );
+}
+
+export default function Step01() {
+  const {
+    watch,
+    formState: { errors },
+  } = useFormContext();
+
+  const { data: books } = useSuspenseQuery({
+    queryKey: ["books"],
+    queryFn: fetchBooks,
+  });
+
+  const selectedBookId = watch("bookId");
+  const selectedBook = books.find((book: any) => book.id === selectedBookId);
+
+  return (
+    <ColGapDiv>
+      <ErrorBoundary FallbackComponent={RejectedFallback}>
+        <Suspense fallback={<LoadingBar />}>
+          <BookAutoComplete />
+        </Suspense>
+      </ErrorBoundary>
+
+      {selectedBook && (
+        <>
+          <RowBetweenMain key={selectedBook.id}>
             <ColGapDiv>
               <h1>1단계</h1>
-              <h2>제목: </h2>
-              <h3>저자: </h3>
+              <h2>{selectedBook.title}</h2>
+              <h3>{selectedBook.author}</h3>
+              <h4>출판일: {selectedBook.published}</h4>
+              <h4>페이지 수: {selectedBook.pageNum}</h4>
             </ColGapDiv>
 
             <ImageDiv>
-              <Image src={book.image} alt={book.title} fill />
+              <FitImage
+                src={selectedBook.image}
+                alt={selectedBook.title}
+                fill
+              />
             </ImageDiv>
-          </RowGapDiv>
-        );
-      })}
-    </div>
+          </RowBetweenMain>
+
+          <ColGapDiv>
+            <ColGapDiv>
+              <ReadStatus publishedDate={dayjs(selectedBook.published)} />
+
+              {errors.readStatus && (
+                <Small>{errors.readStatus.message as string}</Small>
+              )}
+            </ColGapDiv>
+          </ColGapDiv>
+        </>
+      )}
+    </ColGapDiv>
   );
 }

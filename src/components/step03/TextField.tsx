@@ -17,6 +17,7 @@ export default function TextField() {
       onChange={handleChange}
       minLength={MIN_LENGTH}
       placeholder="리뷰 남기기"
+      hasError
     />
   );
 }

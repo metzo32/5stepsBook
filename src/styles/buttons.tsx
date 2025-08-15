@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import ButtonProps from "../types/button.type"
+import ButtonProps from "../types/button.type";
 
 const ButtonStrongStyle = styled.button`
   background: ${({ theme }) => theme.colors.primary};
@@ -28,10 +28,15 @@ export function ButtonStrong({
 }
 
 const ButtonMediumStyle = styled.button`
-  background: ${({ theme }) => theme.colors.disabledBg};
-  color: ${({ theme }) => theme.colors.textInverted};
+  border: 2px solid;
+  border-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.primary};
   padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: 5px;
+
+  :hover {
+    opacity: 50%;
+  }
 `;
 
 export function ButtonMedium({

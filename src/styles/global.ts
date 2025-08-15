@@ -37,6 +37,7 @@ const globalStyles = (theme: AppTheme) => css`
 
   body {
     padding: 20px;
+    height: 100vh;
   }
 
   a {
@@ -59,6 +60,8 @@ const globalStyles = (theme: AppTheme) => css`
     padding: 0;
     margin: 0;
     outline: none;
+    cursor: pointer;
+    white-space: nowrap;
   }
 
   input,
@@ -67,23 +70,28 @@ const globalStyles = (theme: AppTheme) => css`
     font: inherit;
     color: inherit;
     background: none;
-    border: 2px solid ${theme.colors.primaryDark};
+    border: 2px solid ${theme.colors.disabledText};
     border-radius: 5px;
     padding: 10px;
     margin: 0;
     outline: none;
   }
 
-  input[aria-invalid="true"] {
+  input[aria-invalid="true"],
+  textarea[aria-invalid="true"] {
     border-color: ${theme.colors.error};
   }
 
-  input[aria-invalid="false"] {
+  input[aria-invalid="false"],
+  textarea[aria-invalid="false"] {
     border-color: ${theme.colors.primary};
   }
 
-  button {
-    cursor: pointer;
+  textarea {
+    resize: none;
+    min-width: 200px;
+    width: 100%;
+    aspect-ratio: 3/1;
   }
 
   img,

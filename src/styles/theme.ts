@@ -1,3 +1,6 @@
+// emotion 전용테마
+
+import type {} from "@mui/x-date-pickers/themeAugmentation";
 const theme = {
   colors: {
     primary: "#2563EB",       // 파란색 중심 (버튼, 강조 텍스트 등)
@@ -23,7 +26,7 @@ const theme = {
     info: "#0EA5E9",          // 정보 메시지
 
     disabledBg: "#E2E8F0",     
-    disabledText: "#94A3B8",   
+    disabledText: "#adafb2",   
   },
 };
 
