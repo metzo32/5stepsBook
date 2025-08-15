@@ -1,13 +1,13 @@
 import { Suspense, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { ErrorBoundary } from "react-error-boundary";
 import BookAutoComplete from "@/components/BookAutoComplete";
-import ReadStatus from "./readStatus";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { fetchBooks } from "@/utils/api";
 import dayjs from "dayjs";
+import ReadStatus from "./readStatus";
 import { ColGapDiv, ImageDiv, FitImage, RowBetweenMain } from "@/styles/divs";
 import { Small } from "@/styles/textTags";
-import { fetchBooks } from "@/utils/api";
 
 function LoadingBar() {
   return <div>책 목록 불러오는 중...</div>;
@@ -35,13 +35,8 @@ export default function Step01() {
   const selectedBookId = watch("bookId");
   const selectedBook = books.find((book: any) => book.id === selectedBookId);
 
-  useEffect(() => {
-    console.log("선택한 책", selectedBookId);
-  }, [selectedBookId]);
-
   return (
     <ColGapDiv>
-      {/* 책 선택 AutoComplete */}
       <ErrorBoundary FallbackComponent={RejectedFallback}>
         <Suspense fallback={<LoadingBar />}>
           <BookAutoComplete />

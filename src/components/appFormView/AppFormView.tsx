@@ -7,13 +7,17 @@ import { dayjsToString } from "../modules/dayjsToString";
 import dayjs from "dayjs";
 import { WrapperStyle } from "./styles";
 import { RowGapDiv } from "@/styles/divs";
-import { Book } from "@/types/books";
+import type { Book } from "@/types/books";
 
 export default function AppFormView() {
   const allFormValues = useWatch() as FormValues;
 
   const [delayedFormValues, setDelayedFormValues] =
     useState<FormValues>(allFormValues);
+
+  const [isWideView, setIsWideView] = useState<boolean>(
+    typeof window !== "undefined" ? window.innerWidth >= 1024 : false
+  );
 
   const { data: books = [] } = useQuery({
     queryKey: ["books"],
@@ -24,20 +28,37 @@ export default function AppFormView() {
     (book: Book) => book.id === delayedFormValues.bookId
   );
 
+  // 0.5초 시간차 렌더링
   useEffect(() => {
     const timer = setTimeout(() => {
       setDelayedFormValues(allFormValues);
     }, 500);
-    console.log("전체", allFormValues);
 
     return () => clearTimeout(timer);
   }, [allFormValues]);
+
+  // window size event 수신
+  useEffect(() => {
+    const handleResize = () => {
+      setIsWideView(window.innerWidth >= 1024);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      // cleanup 필수
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  if (!isWideView) return null;
 
   return (
     <WrapperStyle>
       <h3>독서 상태</h3>
 
-      {delayedFormValues.bookId && <p>제목: {selectedBook.title}</p>}
+      {delayedFormValues.bookId && selectedBook && (
+        <p>제목: {selectedBook.title}</p>
+      )}
 
       {delayedFormValues.readStatus && <p>{delayedFormValues.readStatus}</p>}
       {dayjs.isDayjs(delayedFormValues.startDate) && (

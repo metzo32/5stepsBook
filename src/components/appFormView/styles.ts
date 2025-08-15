@@ -6,8 +6,4 @@ export const WrapperStyle = styled.div`
   border-radius: 15px;
   padding: 20px;
   background: ${({ theme }) => theme.colors.disabledBg};
-
-  @media (max-width: 1023px) {
-    display: none;
-  }
 `;
