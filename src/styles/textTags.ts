@@ -43,3 +43,23 @@ export const QuoteTextarea = styled.textarea<{ hasError?: boolean }>`
     ${({ hasError, theme }) =>
       hasError ? theme.colors.error : theme.colors.secondary};
 `;
+
+export const OptionsUl = styled.ul`
+  position: absolute;
+  top: 50px;
+  left: 0;
+  width: 100%;
+  background-color: #ddd;
+  border-radius: 5px;
+  padding: 10px 0px;
+  z-index: 20;
+`;
+
+export const OptionLi = styled.li`
+  padding: 5px 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+`;

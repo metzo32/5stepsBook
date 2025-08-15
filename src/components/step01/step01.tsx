@@ -1,46 +1,84 @@
+import { Suspense, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
+import { ErrorBoundary } from "react-error-boundary";
+import BookAutoComplete from "@/components/BookAutoComplete";
 import ReadStatus from "./readStatus";
-import type { Book } from "@/types/books";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
-// import JotaiTest from "@/states/JotaiTest";
 import { ColGapDiv, ImageDiv, FitImage, RowBetweenMain } from "@/styles/divs";
 import { Small } from "@/styles/textTags";
+import { fetchBooks } from "@/utils/api";
 
-export default function Step01({ books }: { books: Book[] }) {
+function LoadingBar() {
+  return <div>책 목록 불러오는 중...</div>;
+}
+
+function RejectedFallback({ error }: { error: Error }) {
+  return (
+    <div>
+      <p>에러 발생: {error.message}</p>
+    </div>
+  );
+}
+
+export default function Step01() {
   const {
+    watch,
     formState: { errors },
   } = useFormContext();
 
+  const { data: books } = useSuspenseQuery({
+    queryKey: ["books"],
+    queryFn: fetchBooks,
+  });
+
+  const selectedBookId = watch("bookId");
+  const selectedBook = books.find((book: any) => book.id === selectedBookId);
+
+  useEffect(() => {
+    console.log("선택한 책", selectedBookId);
+  }, [selectedBookId]);
+
   return (
     <ColGapDiv>
-      {/* <JotaiTest /> */}
-      {books.map((book, idx) => {
-        return (
-          <RowBetweenMain key={idx}>
+      {/* 책 선택 AutoComplete */}
+      <ErrorBoundary FallbackComponent={RejectedFallback}>
+        <Suspense fallback={<LoadingBar />}>
+          <BookAutoComplete />
+        </Suspense>
+      </ErrorBoundary>
+
+      {selectedBook && (
+        <>
+          <RowBetweenMain key={selectedBook.id}>
             <ColGapDiv>
               <h1>1단계</h1>
-              <h2>{book.title}</h2>
-              <h3>{book.author}</h3>
-              <h4>출판일: {book.published}</h4>
-              <h4>페이지 수: {book.pageNum}</h4>
+              <h2>{selectedBook.title}</h2>
+              <h3>{selectedBook.author}</h3>
+              <h4>출판일: {selectedBook.published}</h4>
+              <h4>페이지 수: {selectedBook.pageNum}</h4>
             </ColGapDiv>
 
             <ImageDiv>
-              <FitImage src={book.image} alt={book.title} fill />
+              <FitImage
+                src={selectedBook.image}
+                alt={selectedBook.title}
+                fill
+              />
             </ImageDiv>
           </RowBetweenMain>
-        );
-      })}
 
-      <ColGapDiv>
-        <ColGapDiv>
-          <ReadStatus publishedDate={dayjs(books[0]?.published)} />
+          <ColGapDiv>
+            <ColGapDiv>
+              <ReadStatus publishedDate={dayjs(selectedBook.published)} />
 
-          {errors.readStatus && (
-            <Small>{errors.readStatus.message as String}</Small>
-          )}
-        </ColGapDiv>
-      </ColGapDiv>
+              {errors.readStatus && (
+                <Small>{errors.readStatus.message as string}</Small>
+              )}
+            </ColGapDiv>
+          </ColGapDiv>
+        </>
+      )}
     </ColGapDiv>
   );
 }

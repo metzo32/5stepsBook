@@ -9,6 +9,7 @@ export const ColGapDiv = styled.div`
 export const ColGapDivFull = styled.div`
   width: 100%;
   ${colGap}
+  position: relative;
 `;
 
 export const ColGapDivLg = styled.div`

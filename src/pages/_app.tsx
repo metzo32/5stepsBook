@@ -15,20 +15,33 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import muiTheme from "@/styles/muiTheme";
 import { useEffect } from "react";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/queryClient";
+import { fetchBooks } from "@/utils/api";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const clientSideEmotionCache = createEmotionCache();
-  
+
   useEffect(() => {
-    // Initialize MSW only in development and only on the client side
-    if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
+    if (
+      process.env.NODE_ENV === "development" &&
+      typeof window !== "undefined"
+    ) {
       if (process.env.NEXT_PUBLIC_API_MOCKING === "enabled") {
         import("../mocks/browser").then(({ worker }) => {
-          worker.start({
-            onUnhandledRequest: "warn",
-          });
+          worker.start();
         });
       }
+    }
+
+    // Prefetch books data immediately
+    if (typeof window !== "undefined") {
+      queryClient.prefetchQuery({
+        queryKey: ["books"],
+        queryFn: fetchBooks,
+        staleTime: 0,
+        gcTime: 0,
+      });
     }
   }, []);
 
@@ -36,10 +49,12 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     <CacheProvider value={clientSideEmotionCache}>
       <EmotionThemeProvider theme={theme}>
         <MUIThemeProvider theme={muiTheme}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Global styles={globalStyles} />
-            <Component {...pageProps} />
-          </LocalizationProvider>
+          <QueryClientProvider client={queryClient}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <Global styles={globalStyles} />
+              <Component {...pageProps} />
+            </LocalizationProvider>
+          </QueryClientProvider>
         </MUIThemeProvider>
       </EmotionThemeProvider>
     </CacheProvider>
