@@ -1,10 +1,13 @@
-import { useWatch } from "react-hook-form";
-import { WrapperStyle } from "./styles";
 import { useEffect, useState } from "react";
-import { dayjsToString } from "../modules/dayjsToString";
-import { RowGapDiv } from "@/styles/divs";
+import { useWatch } from "react-hook-form";
+import { useQuery } from "@tanstack/react-query";
 import { FormValues } from "@/types/defaultFormValues";
+import { fetchBooks } from "@/utils/api";
+import { dayjsToString } from "../modules/dayjsToString";
 import dayjs from "dayjs";
+import { WrapperStyle } from "./styles";
+import { RowGapDiv } from "@/styles/divs";
+import { Book } from "@/types/books";
 
 export default function AppFormView() {
   const allFormValues = useWatch() as FormValues;
@@ -12,10 +15,20 @@ export default function AppFormView() {
   const [delayedFormValues, setDelayedFormValues] =
     useState<FormValues>(allFormValues);
 
+  const { data: books = [] } = useQuery({
+    queryKey: ["books"],
+    queryFn: fetchBooks,
+  });
+
+  const selectedBook = books.find(
+    (book: Book) => book.id === delayedFormValues.bookId
+  );
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setDelayedFormValues(allFormValues);
     }, 500);
+    console.log("전체", allFormValues);
 
     return () => clearTimeout(timer);
   }, [allFormValues]);
@@ -23,6 +36,8 @@ export default function AppFormView() {
   return (
     <WrapperStyle>
       <h3>독서 상태</h3>
+
+      {delayedFormValues.bookId && <p>제목: {selectedBook.title}</p>}
 
       {delayedFormValues.readStatus && <p>{delayedFormValues.readStatus}</p>}
       {dayjs.isDayjs(delayedFormValues.startDate) && (

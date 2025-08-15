@@ -5,7 +5,7 @@ export const Small = styled.small`
 `;
 
 export const Main = styled.main`
-  height: 100%;
+  height: 80vh;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: 1fr;

@@ -7,6 +7,7 @@ export interface Quote {
 
 // 타입
 export interface FormValues {
+  bookId: number | null;
   readStatus: string | null;
   startDate: Dayjs | null;
   endDate: Dayjs | null;
@@ -18,6 +19,7 @@ export interface FormValues {
 
 // 초기값
 export const defaultFormValues: FormValues = {
+  bookId: null,
   readStatus: null,
   startDate: null,
   endDate: null,

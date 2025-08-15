@@ -11,9 +11,6 @@ export default function Step04() {
   const { data: books } = useSuspenseQuery({
     queryKey: ["books"],
     queryFn: fetchBooks,
-    staleTime: 0, // Always fetch fresh data
-    gcTime: 0, // Don't cache
-    refetchOnMount: true, // Always refetch on mount
   });
 
   const selectedBook = books.find((book: any) => book.id === selectedBookId);

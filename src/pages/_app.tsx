@@ -34,13 +34,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       }
     }
 
-    // Prefetch books data immediately
     if (typeof window !== "undefined") {
       queryClient.prefetchQuery({
         queryKey: ["books"],
         queryFn: fetchBooks,
-        staleTime: 0,
-        gcTime: 0,
       });
     }
   }, []);

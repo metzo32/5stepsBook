@@ -9,7 +9,7 @@ interface Option {
 }
 
 interface AutoCompleteProps {
-  name: string;
+  name: string; // RHF 필드 이름
   options: Option[];
 }
 
@@ -48,8 +48,8 @@ export default function AutoComplete({ name, options }: AutoCompleteProps) {
                 <OptionLi
                   key={opt.value}
                   onClick={() => {
-                    field.onChange(opt.value);
-                    setInput(""); // 선택 후 입력창 비우기
+                    field.onChange(opt.value); // 해당 bookId 등록
+                    setInput("");
                     setShowOptions(false);
                   }}
                 >
